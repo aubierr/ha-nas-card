@@ -6,6 +6,7 @@
 [![Lint](https://github.com/juju35/ha-nas-card/actions/workflows/lint.yml/badge.svg)](https://github.com/juju35/ha-nas-card/actions/workflows/lint.yml)
 [![Release](https://img.shields.io/github/v/release/juju35/ha-nas-card)](https://github.com/juju35/ha-nas-card/releases/latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/julienstep9)
 
 <p align="center">
   <img src="images/ugreen.svg" alt="UGREEN" width="64">&nbsp;&nbsp;
@@ -301,3 +302,9 @@ UGREEN and its logo are trademarks of UGREEN Group; Synology, DSM and the Synolo
 ## License
 
 [MIT](LICENSE)
+
+## Support
+
+If you find this project useful, you can support its development:
+
+<a href="https://buymeacoffee.com/julienstep9"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me a Coffee" height="50"></a>
