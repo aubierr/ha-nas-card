@@ -28,11 +28,11 @@ The cards are built on top of the [UGREEN NAS integration](https://github.com/To
 ## Features
 
 - Two cards: a full **NAS Card** and a compact **NAS Mini Card**, of type `custom:nas-card` and `custom:nas-mini-card` (the former types `custom:ugreen-nas-card` and `custom:ugreen-nas-mini-card` keep working)
-- Three integrations: **UGREEN NAS**, **Synology DSM** and **QNAP** — automatic discovery, several NAS supported, brands can be mixed
+- Four integrations: **UGREEN NAS**, **Synology DSM**, **QNAP** and **ASUSTOR** ([ha-asustor](https://github.com/aubierr/ha-asustor), SNMP) — automatic discovery, several NAS supported, brands can be mixed
 - CPU, RAM and temperature gauges, uptime and CPU model; the CPU and RAM gauges (and the mini card's CPU and RAM bars) draw their last 24 hours behind them, on a 0–100 % scale (recorder statistics)
 - Network download / upload rates, with their last 24 hours drawn behind each tile, on the full card and the mini card (recorder statistics)
 - Volumes with RAID level, filesystem, status and used space
-- RAID state of each volume as a coloured chip: healthy (green), a background task such as syncing, rebuilding, repairing or checking (orange), degraded or crashed (red); the mini card shows the worst unhealthy one in its footer. From the storage pool status on UGREEN and the volume status on Synology DSM (QNAP's integration reports none)
+- RAID state of each volume as a coloured chip: healthy (green), a background task such as syncing, rebuilding, repairing or checking (orange), degraded or crashed (red); the mini card shows the worst unhealthy one in its footer. From the storage pool status on UGREEN and the volume status on Synology DSM and ASUSTOR (QNAP's integration reports none)
 - Disks with model, status, temperature, size and power-on hours; the status dot turns red on any disk problem (on Synology also the SMART status and the bad sector / remaining life thresholds); a volume or disk without status entity has no dot
 - UGREEN and Synology: an « Update available » chip when UGOS or DSM has an update (click for its more-info dialog), and a reboot button at the end of the system facts, with a confirmation popup at the top of the card
 - Fans speed (CPU fan and case fans, UGREEN)
@@ -56,6 +56,7 @@ The cards are built on top of the [UGREEN NAS integration](https://github.com/To
 | [UGREEN NAS](https://github.com/Tom-Bom-badil/home-assistant_ugreen-nas) (Marketplace) | UGREEN DXP and DH | Everything: CPU, RAM, temperatures, network, volumes, disks, **fans**, server status, UGOS version and update, reboot, link to UGOS |
 | [Synology DSM](https://www.home-assistant.io/integrations/synology_dsm/) (built in) | Synology | CPU, RAM, temperature, network, volumes, disks (status, SMART, bad sectors, remaining life), security status, DSM version and update, reboot, link to DSM; no fans |
 | [QNAP](https://www.home-assistant.io/integrations/qnap/) (built in) | QNAP | CPU, RAM, temperature, network, volumes, drives, server status, QTS / QuTS hero firmware; no fans |
+| [ASUSTOR](https://github.com/aubierr/ha-asustor) (SNMP, custom) | ASUSTOR | CPU, RAM, temperatures, fans, network, volumes (RAID level and status), disks (SMART), ADM version and update; no server status, no reboot |
 
 Several NAS are supported, and brands can be mixed. Some sensors of the Synology DSM and QNAP integrations are disabled by default, see [How it works](#how-it-works).
 
@@ -153,7 +154,7 @@ language: fr
 | `title` | both | NAS name | Card title |
 | `show_image` | both | `true` | Show the NAS picture |
 | `image` | both | NAS model | Picture to show: a model name (`DXP4800 Plus`, `DXP480T Plus`, `DH4300 Plus`, `DS923+`, `DS1821+`, `RS822+`, `TS-464`, `TVS-h674`, `TS-873AeU`… — see the [drawn models](#screenshots)) or an image URL (e.g. `/local/my-nas.png`). By default the picture follows the model reported by the integration; an unknown model of a known family is drawn from its bay count |
-| `url` | both | Device configuration URL | Web interface of the NAS, opened by a click on the NAS picture. By default the configuration URL of the NAS device in Home Assistant (the « Visit » link of the device page), set by the UGREEN NAS and Synology DSM integrations; the QNAP integration has none, so set it for a QNAP NAS (e.g. `http://192.168.1.10:8080`) |
+| `url` | both | Device configuration URL | Web interface of the NAS, opened by a click on the NAS picture. By default the configuration URL of the NAS device in Home Assistant (the « Visit » link of the device page), set by the UGREEN NAS and Synology DSM integrations; the QNAP and ASUSTOR integrations have none, so set it for a QNAP or ASUSTOR NAS (e.g. `http://192.168.1.10:8080`) |
 | `brand_url` | both | Brand website | Website opened by a click on the header icon: [nas.ugreen.com](https://nas.ugreen.com), [synology.com](https://www.synology.com) or [qnap.com](https://www.qnap.com) by default |
 | `show_system` | full | `true` | CPU, RAM and temperature gauges, uptime, CPU model |
 | `show_network` | both | `true` | Network download / upload |
@@ -217,6 +218,12 @@ Drawn QNAP models (graphite towers with the copper strip, rackmounts for the mod
 
 <p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/models-qnap.svg" alt="QNAP NAS pictures" width="760"></p>
 
+### <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/asustor.svg" alt="" width="24"> ASUSTOR
+
+Drawn ASUSTOR models, all the 83 of the manufacturer's resource page, one drawing per product family after its product photos: Drivestor (closed front with a diamond texture, orange mark), Drivestor Pro and Nimbustor (glossy black front with one tray per disk, red lines), Lockerstor and the AS50…AS70 ranges (control strip with teal and blue lines, a display from 4 bays, vertical trays, two columns of horizontal trays from 8 bays), rackmounts (a row of bays for 1U, a grid of four columns above) and the flat Flashstor (a thin slab for the FS6712X). The bay count is the last two digits of the model number (AS5304T → 4, AS6708T → 8, FS6712X → 12), or the last digit of an older three-digit one (AS-604RS → 4). Older AS-… models have no photo and use the tray drawing:
+
+<p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/models-asustor.svg" alt="ASUSTOR NAS pictures" width="760"></p>
+
 ## How it works
 
 ### UGREEN NAS
@@ -224,6 +231,10 @@ Drawn QNAP models (graphite towers with the copper strip, rackmounts for the mod
 Every entity created by the integration carries a `UGNAS_device_id` attribute. The cards use it to gather the entities of a NAS, then recognize each sensor from the end of its entity id (`cpu_usage`, `pool_1_volume_1_used_size_raw`, `pool_2_disk_1_temperature`…). Entity ids de-duplicated by Home Assistant (for example `sensor.ugreen_nas_cpu_usage_2`) are supported, and so are renamed devices. Volume sizes are read from the `*_raw` sensors (bytes) so that the used space is exact whatever the unit chosen by the integration.
 
 The UGOS version is read from `nas_ugos_version` or, for a NAS adopted with integration v2026.10.1 or later (where the sensor became « UGOS Version »), from `ugos_version`. The **Update Available** sensor (v2026.10.1 and later) shows an « Update available » chip with the new UGOS version while it is `True`. The **Power Action: Reboot** button (`power_action_reboot`, v2026.05.1 and later) adds the reboot button at the end of the system facts, with the same confirmation popup as on Synology; buttons carry no `UGNAS_device_id`, so the cards pick the one on the NAS's device, or the one named after its entity prefix (shutdown and wake-up buttons are never used).
+
+### ASUSTOR
+
+The [ha-asustor](https://github.com/aubierr/ha-asustor) integration (SNMP) is discovered like Synology DSM: the NAS is the root device, and its volumes, disks and network interfaces are child devices. CPU, RAM, CPU and system temperatures, uptime (converted from the unit Home Assistant displays, days by default), CPU model, fans, the ADM update chip (« ADM x.y » under the name), a volume's RAID level, status (the RAID chip) and filesystem, and each disk's temperature, status, SMART health, size and model. The first network interface feeds the network tiles. Total and used volume sizes are disabled by default in the integration: they are deduced from the free space and the used percentage. No server status and no reboot button (the integration has none). The model pictures (AS…, FS…, rackmounts for AS…R…) are drawings.
 
 ### Synology DSM and QNAP
 
@@ -236,7 +247,7 @@ The cards read the Home Assistant entity and device registries instead of entity
 
 ### NAS pictures
 
-The picture is drawn from the model reported by the integration, so a renamed NAS keeps the right picture: UGREEN DXP towers (aluminium) and DH towers (white) by bay count, the flat all-flash DXP480T; Synology DS towers with the bay count of their family (DS723+ has 2 bays, DS923+ 4, DS1522+ 5, DS1821+ 8…) and RS rackmounts; QNAP towers with the bay count of their name (TS-464 → 4) and rackmounts for the models ending in U (TS-873AeU, TS-1264U-RP). Use the `image` option to pick another one or your own.
+The picture is drawn from the model reported by the integration, so a renamed NAS keeps the right picture: UGREEN DXP towers (aluminium) and DH towers (white) by bay count, the flat all-flash DXP480T; Synology DS towers with the bay count of their family (DS723+ has 2 bays, DS923+ 4, DS1522+ 5, DS1821+ 8…) and RS rackmounts; QNAP towers with the bay count of their name (TS-464 → 4) and rackmounts for the models ending in U (TS-873AeU, TS-1264U-RP). ASUSTOR towers (AS…, FS…) with the bay count of their number (AS5304T → 4) and rackmounts for AS…R… models. Use the `image` option to pick another one or your own.
 
 ### Units
 
@@ -320,7 +331,7 @@ Contributions for additional languages are welcome!
 
 ## Credits
 
-UGREEN and its logo are trademarks of UGREEN Group; Synology, DSM and the Synology logo are trademarks of Synology Inc.; QNAP, QTS, QuTS hero and the QNAP logo are trademarks of QNAP Systems, Inc.. The NAS pictures are drawings, not product photos. This project is not affiliated with UGREEN, Synology or QNAP.
+UGREEN and its logo are trademarks of UGREEN Group; Synology, DSM and the Synology logo are trademarks of Synology Inc.; QNAP, QTS, QuTS hero and the QNAP logo are trademarks of QNAP Systems, Inc.; ASUSTOR, ADM and the ASUSTOR logo are trademarks of ASUSTOR Inc. The NAS pictures are drawings, not product photos. This project is not affiliated with UGREEN, Synology, QNAP or ASUSTOR.
 
 ## License
 
