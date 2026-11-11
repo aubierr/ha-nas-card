@@ -8,6 +8,7 @@
 - The editor and error texts name ASUSTOR in the 22 languages; the « url » hint tells to set it for ASUSTOR as for QNAP (neither integration provides a configuration URL). The brand logo comes from the Dashboard Icons collection.
 
 ### Fixes
+- ASUSTOR volumes and disks are labelled « Volume 1 », « Disk 1 » instead of « NAS Volume 1 » / « NAS Disk 1 » (the NAS name prefix of the integration's device names is left out), so a narrow disk tile no longer cuts its name.
 - The uptime of a duration sensor is converted from its own unit (Home Assistant shows ASUSTOR's in days).
 - A volume known only by its free space and used percentage gets its total and used sizes deduced.
 - A disk reported « Idle » is healthy.

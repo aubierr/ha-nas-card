@@ -11,12 +11,13 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/ugreen.svg" alt="UGREEN" width="64">&nbsp;&nbsp;
   <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/synology.png" alt="Synology" width="64">&nbsp;&nbsp;
-  <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/qnap.png" alt="QNAP" width="64">
+  <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/qnap.png" alt="QNAP" width="64">&nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/asustor.svg" alt="ASUSTOR" width="64">
 </p>
 
-Lovelace cards for Home Assistant to monitor NAS devices — [UGREEN](https://nas.ugreen.com), [Synology](https://www.synology.com) and [QNAP](https://www.qnap.com): CPU, RAM, temperatures, disks, RAID volumes and network at a glance.
+Lovelace cards for Home Assistant to monitor NAS devices — [UGREEN](https://nas.ugreen.com), [Synology](https://www.synology.com), [QNAP](https://www.qnap.com) and [ASUSTOR](https://www.asustor.com): CPU, RAM, temperatures, disks, RAID volumes and network at a glance.
 
-The cards are built on top of the [UGREEN NAS integration](https://github.com/Tom-Bom-badil/home-assistant_ugreen-nas), and of the [Synology DSM](https://www.home-assistant.io/integrations/synology_dsm/) and [QNAP](https://www.home-assistant.io/integrations/qnap/) integrations included in Home Assistant: entities are **discovered automatically**, you don't have to pick them one by one, and it works whatever your Home Assistant language.
+The cards are built on top of the [UGREEN NAS integration](https://github.com/Tom-Bom-badil/home-assistant_ugreen-nas), and of the [Synology DSM](https://www.home-assistant.io/integrations/synology_dsm/) and [QNAP](https://www.home-assistant.io/integrations/qnap/) integrations included in Home Assistant, and of the [ASUSTOR integration](https://github.com/aubierr/ha-asustor): entities are **discovered automatically**, you don't have to pick them one by one, and it works whatever your Home Assistant language.
 
 [![Open your Home Assistant instance and open a repository inside the Marketplace.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=juju35&repository=ha-nas-card&category=plugin)
 
@@ -40,7 +41,7 @@ The cards are built on top of the [UGREEN NAS integration](https://github.com/To
 - Colors turn orange / red when a threshold is crossed (CPU, RAM, temperatures, volume usage)
 - Detail button on the mini card (top right): it switches the mini card to the full card's content and back; a click anywhere outside the card brings the compact view back
 - Click any value to open its Home Assistant history (more-info dialog)
-- Round NAS icon next to the NAS name, in the status color (green when the NAS is normal, orange on a warning, grey when the status is unavailable), with the brand logo (UGREEN, Synology or QNAP) as a badge: a click opens the brand's website
+- Round NAS icon next to the NAS name, in the status color (green when the NAS is normal, orange on a warning, grey when the status is unavailable), with the brand logo (UGREEN, Synology, QNAP or ASUSTOR) as a badge: a click opens the brand's website
 - Click the NAS picture to open the NAS web interface (UGOS, DSM, QTS), found automatically from Home Assistant for UGREEN and Synology; both addresses can be changed in the visual editor
 - Drawn NAS picture that follows the model: 43 models drawn across the three brands — towers by bay count, all-flash DXP480T, rackmounts (see [Screenshots](#screenshots)) — or your own picture
 - Visual editor in the dashboard UI for both cards (no YAML needed), with the pictures listed by brand
@@ -155,7 +156,7 @@ language: fr
 | `show_image` | both | `true` | Show the NAS picture |
 | `image` | both | NAS model | Picture to show: a model name (`DXP4800 Plus`, `DXP480T Plus`, `DH4300 Plus`, `DS923+`, `DS1821+`, `RS822+`, `TS-464`, `TVS-h674`, `TS-873AeU`… — see the [drawn models](#screenshots)) or an image URL (e.g. `/local/my-nas.png`). By default the picture follows the model reported by the integration; an unknown model of a known family is drawn from its bay count |
 | `url` | both | Device configuration URL | Web interface of the NAS, opened by a click on the NAS picture. By default the configuration URL of the NAS device in Home Assistant (the « Visit » link of the device page), set by the UGREEN NAS and Synology DSM integrations; the QNAP and ASUSTOR integrations have none, so set it for a QNAP or ASUSTOR NAS (e.g. `http://192.168.1.10:8080`) |
-| `brand_url` | both | Brand website | Website opened by a click on the header icon: [nas.ugreen.com](https://nas.ugreen.com), [synology.com](https://www.synology.com) or [qnap.com](https://www.qnap.com) by default |
+| `brand_url` | both | Brand website | Website opened by a click on the header icon: [nas.ugreen.com](https://nas.ugreen.com), [synology.com](https://www.synology.com), [qnap.com](https://www.qnap.com) or [asustor.com](https://www.asustor.com) by default |
 | `show_system` | full | `true` | CPU, RAM and temperature gauges, uptime, CPU model |
 | `show_network` | both | `true` | Network download / upload |
 | `show_history` | both | `true` | 24 h curves behind the download / upload tiles (on the mini card, the rates then show as tiles above the footer instead of in it) and behind the CPU and RAM gauges and mini card bars (0–100 % scale), from the recorder's 5-minute statistics, fetched in one query (needs sensors with a `state_class`; a sensor without one simply gets no curve). Sections hidden with `show_system` / `show_network` are not fetched. Points sit at their time over the last 24 hours, and the curve breaks where data is missing |
@@ -219,6 +220,12 @@ Drawn QNAP models (graphite towers with the copper strip, rackmounts for the mod
 <p align="center"><img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/models-qnap.svg" alt="QNAP NAS pictures" width="760"></p>
 
 ### <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/images/asustor.svg" alt="" width="24"> ASUSTOR
+
+AS5202T (Nimbustor 2) set up with ha-asustor, in a Home Assistant dashboard:
+
+| Full card | Mini card |
+|---|---|
+| <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/screenshots/card-asustor.png" alt="card asustor" width="400"> | <img src="https://raw.githubusercontent.com/juju35/ha-nas-card/main/screenshots/mini-card-asustor.png" alt="mini card asustor" width="400"> |
 
 Drawn ASUSTOR models, all the 83 of the manufacturer's resource page, one drawing per product family after its product photos: Drivestor (closed front with a diamond texture, orange mark), Drivestor Pro and Nimbustor (glossy black front with one tray per disk, red lines), Lockerstor and the AS50…AS70 ranges (control strip with teal and blue lines, a display from 4 bays, vertical trays, two columns of horizontal trays from 8 bays), rackmounts (a row of bays for 1U, a grid of four columns above) and the flat Flashstor (a thin slab for the FS6712X). The bay count is the last two digits of the model number (AS5304T → 4, AS6708T → 8, FS6712X → 12), or the last digit of an older three-digit one (AS-604RS → 4). Older AS-… models have no photo and use the tray drawing:
 

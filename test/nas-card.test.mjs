@@ -1761,10 +1761,12 @@ test("ASUSTOR discovery: scalars, fans, volume, disks and the first interface's 
   const vols = Object.values(nas.pools[1].volumes);
   assert.equal(vols.length, 1);
   assert.equal(vols[0].level, "sensor.asustor_nas_volume_1_raid_level");
+  assert.equal(vols[0].labelText, "Volume 1"); // the NAS name prefix of ha-asustor's device names is left out
   assert.equal(vols[0].filesystem, "sensor.asustor_nas_volume_1_filesystem");
   const disks = Object.values(nas.pools[1].disks);
   assert.equal(disks.length, 2);
   assert.equal(disks[0].modelText, "ST8000VN004");
+  assert.equal(disks[0].labelText, "Disk 1");
   assert.equal(disks[0].smart, "sensor.asustor_nas_disk_1_health");
 });
 

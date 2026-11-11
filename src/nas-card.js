@@ -2411,6 +2411,13 @@ const discoverRegistry = (hass, brand, nasId) => {
   const SCALARS_BY_KEY = { synology: SYNO_SCALARS, qnap: QNAP_SCALARS, asustor: ASUSTOR_SCALARS }[brand];
   const pool = (nas.pools[1] = { volumes: {}, disks: {} });
   const groups = {};
+  // Label of a child device (a volume or a disk). ha-asustor names them "<NAS name> <part>" ("NAS Disk 1"): the NAS
+  // name is left out, so that a narrow disk tile keeps "Disk 1" instead of cutting "NAS Disk…".
+  const childLabel = (d) => {
+    const name = String(d?.name_by_user || d?.name || "");
+    const root = deviceName(dev);
+    return deviceLabel(brand === "asustor" && root && name.toLowerCase().startsWith(`${root.toLowerCase()} `) ? name.slice(root.length + 1) : name);
+  };
 
   for (const id of byRoot.get(rootId)) {
     const e = hass.entities[id];
@@ -2423,9 +2430,9 @@ const discoverRegistry = (hass, brand, nasId) => {
       // Child device of the NAS: a volume or a disk, labelled and (for disks) modelled by its device.
       const d = hass.devices[e.device_id];
       if (brand === "asustor" && tk in ASUSTOR_RATES) set(nas.scalars, ASUSTOR_RATES[tk], id); // First interface feeds the tiles.
-      else if (tk in VOLUME_KEYS) set((pool.volumes[e.device_id] ??= { labelText: deviceLabel(d?.name_by_user || d?.name) }), VOLUME_KEYS[tk], id);
+      else if (tk in VOLUME_KEYS) set((pool.volumes[e.device_id] ??= { labelText: childLabel(d) }), VOLUME_KEYS[tk], id);
       else if (tk in DISK_KEYS || isTemp)
-        set((pool.disks[e.device_id] ??= { labelText: deviceLabel(d?.name_by_user || d?.name), modelText: d?.model }), isTemp ? "temperature" : DISK_KEYS[tk], id);
+        set((pool.disks[e.device_id] ??= { labelText: childLabel(d), modelText: d?.model }), isTemp ? "temperature" : DISK_KEYS[tk], id);
     } else if (isTemp) {
       set(nas.scalars, "sys_temp", id);
     } else if (brand === "synology" && tk === "status" && id.startsWith("binary_sensor.")) {
