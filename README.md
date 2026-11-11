@@ -42,7 +42,7 @@ The cards are built on top of the [UGREEN NAS integration](https://github.com/To
 - Disks with model, status, temperature, size and power-on hours; the status dot turns red on any disk problem (on Synology also the SMART status and the bad sector / remaining life thresholds); a volume or disk without status entity has no dot
 - UGREEN and Synology: an « Update available » chip when UGOS or DSM has an update (click for its more-info dialog), and a reboot button at the end of the system facts, with a confirmation popup at the top of the card
 - Fans speed (CPU fan and case fans, UGREEN)
-- Status pill: the server status (UGREEN, QNAP) or the security status (Synology)
+- Status pill: the server status (UGREEN, QNAP) or the security status (Synology); the ASUSTOR integration reports none
 - Colors turn orange / red when a threshold is crossed (CPU, RAM, temperatures, volume usage)
 - Detail button on the mini card (top right): it switches the mini card to the full card's content and back; a click anywhere outside the card brings the compact view back
 - Click any value to open its Home Assistant history (more-info dialog)
@@ -64,7 +64,7 @@ The cards are built on top of the [UGREEN NAS integration](https://github.com/To
 | [QNAP](https://www.home-assistant.io/integrations/qnap/) (built in) | QNAP | CPU, RAM, temperature, network, volumes, drives, server status, QTS / QuTS hero firmware; no fans |
 | [ASUSTOR](https://github.com/aubierr/ha-asustor) (SNMP, custom) | ASUSTOR | CPU, RAM, temperatures, fans, network, volumes (RAID level and status), disks (SMART), ADM version and update; no server status, no reboot |
 
-Several NAS are supported, and brands can be mixed. Some sensors of the Synology DSM and QNAP integrations are disabled by default, see [How it works](#how-it-works).
+Several NAS are supported, and brands can be mixed. Some sensors of the Synology DSM, QNAP and ASUSTOR integrations are disabled by default, see [How it works](#how-it-works).
 
 ## Prerequisites
 
@@ -73,6 +73,7 @@ Home Assistant 2024.8 or later, and at least one of:
 - the [UGREEN NAS integration](https://github.com/Tom-Bom-badil/home-assistant_ugreen-nas) (available in the Marketplace)
 - the [Synology DSM integration](https://www.home-assistant.io/integrations/synology_dsm/) (included in Home Assistant)
 - the [QNAP integration](https://www.home-assistant.io/integrations/qnap/) (included in Home Assistant)
+- the [ASUSTOR integration](https://github.com/aubierr/ha-asustor) (custom integration, reads the NAS over SNMP: enable SNMP in ADM under **Services → SNMP** first)
 
 ## Installation
 
@@ -104,7 +105,7 @@ Or manually:
 
 ### Visual editor
 
-Edit a dashboard, click **Add card** and search for **NAS Card** or **NAS Mini Card**. The first NAS found is preselected; pick another one in the list if you have several (UGREEN, Synology and QNAP NAS are listed together), set an optional title, choose the picture (listed by brand: « QNAP TS-464 », « Synology DS923+ », « UGREEN DXP4800 Plus »…), the sections to display and the language. The preview updates live, and options left at their default are kept out of the generated YAML.
+Edit a dashboard, click **Add card** and search for **NAS Card** or **NAS Mini Card**. The first NAS found is preselected; pick another one in the list if you have several (UGREEN, Synology, QNAP and ASUSTOR NAS are listed together), set an optional title, choose the picture (listed by brand: « QNAP TS-464 », « Synology DS923+ », « UGREEN DXP4800 Plus »…), the sections to display and the language. The preview updates live, and options left at their default are kept out of the generated YAML.
 
 ### Minimal
 
@@ -156,7 +157,7 @@ language: fr
 
 | Option | Card | Default | Description |
 |---|---|---|---|
-| `nas` | both | First NAS found | NAS to display (only needed with several NAS): the `UGNAS_device_id` attribute for UGREEN, the NAS device name for Synology DSM and QNAP (its device id when two NAS share a name; device ids from earlier versions are still read) — pick it in the visual editor |
+| `nas` | both | First NAS found | NAS to display (only needed with several NAS): the `UGNAS_device_id` attribute for UGREEN, the NAS device name for Synology DSM, QNAP and ASUSTOR (its device id when two NAS share a name; device ids from earlier versions are still read) — pick it in the visual editor |
 | `title` | both | NAS name | Card title |
 | `show_image` | both | `true` | Show the NAS picture |
 | `image` | both | NAS model | Picture to show: a model name (`DXP4800 Plus`, `DXP480T Plus`, `DH4300 Plus`, `DS923+`, `DS1821+`, `RS822+`, `TS-464`, `TVS-h674`, `TS-873AeU`… — see the [drawn models](#screenshots)) or an image URL (e.g. `/local/my-nas.png`). By default the picture follows the model reported by the integration; an unknown model of a known family is drawn from its bay count |
@@ -254,7 +255,7 @@ The cards read the Home Assistant entity and device registries instead of entity
 
 - **Synology DSM**: volumes and disks are child devices of the NAS; their labels and the disk models come from there. The security status binary sensor feeds the status pill (« Normal » / « Warning »), and the uptime comes from the **Last boot** sensor. The DSM version is shown under the model. A disk is shown in red when its status or SMART status is not normal, or when its **Exceeded max bad sectors** or **Below min remaining life** binary sensor is on. The DSM **update** entity of the NAS shows an « Update available » chip with the new version while it is on, and the **Reboot** button (found by its `restart` device class, the shutdown button is never used) adds a reboot button at the end of the system facts: it asks for a confirmation at the top of the card before pressing it.
 - **QNAP**: everything sits on one device; volumes and drives are told apart by the identifier the integration inserts in the entity names (for example `DataVol1` or `0:1`). The first network interface feeds the network tiles, and the firmware is shown as QTS or QuTS hero.
-- Some useful sensors are disabled by default by these integrations — on QNAP, drive temperatures, SMART statuses, memory sizes, network rates and volume used space; on Synology, total volume sizes. Enable them in **Settings → Devices & services → Entities** to fill the matching sections of the card (missing sizes are completed from the used percentage when possible).
+- Some useful sensors are disabled by default by these integrations — on QNAP, drive temperatures, SMART statuses, memory sizes, network rates and volume used space; on Synology, total volume sizes; on ASUSTOR, the total and used volume sizes (deduced from the free space and the used percentage when disabled) and the disk sizes. Enable them in **Settings → Devices & services → Entities** to fill the matching sections of the card (missing sizes are completed from the used percentage when possible).
 - Fans are not reported by these integrations: the fans section only shows on UGREEN NAS.
 
 ### NAS pictures
